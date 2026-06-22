@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Dental Lounge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      color: #fff;
+    }
+
+    /* ── 3D Canvas ── */
+    #canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background:
+        linear-gradient(135deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.40) 50%, rgba(0,0,0,0.60) 100%),
+        url('staff-photo.jpg') center / cover no-repeat;
+    }
+
+    /* ── Header ── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 52px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      position: relative;
+      z-index: 10;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .logo-img {
+      width: 220px;
+      height: auto;
+      max-width: none;
+      margin: 8px 0;
+      transition: transform 0.3s ease;
+      display: block;
+    }
+
+    .logo-img:hover {
+      transform: scale(1.06);
+    }
+
+    .header-vr {
+      width: 1px;
+      height: 48px;
+      background: #d0d0d0;
+    }
+
+    .practice-name {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #2A9325;
+      line-height: 1.2;
+    }
+
+    .practice-name span {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #2A9325;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header-nav-link {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #000;
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+
+    .header-nav-link:hover {
+      color: #2A9325;
+      background: rgba(42,147,37,0.06);
+    }
+
+    .header-social {
+      display: flex;
+      gap: 8px;
+    }
+
+    .header-social-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: sans-serif;
+      transition: transform 0.2s;
+    }
+
+    .header-social-fb {
+      background: #1877F2;
+    }
+
+    .header-social-g {
+      background: #DB4437;
+    }
+
+    .header-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+
+    .header-item:hover {
+      color: #2A9325;
+    }
+
+    .header-item svg {
+      flex-shrink: 0;
+    }
+
+    .phone-link {
+      font-weight: 600;
+      color: #1a1a1a;
+      font-size: 0.95rem;
+    }
+
+    /* ── Hero Body ── */
+    .hero-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 50px 52px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      gap: 50px;
+    }
+
+    .hero-left {
+      flex: 1;
+      min-width: 0;
+      max-width: 560px;
+    }
+
+    .hero-left h1 {
+      font-size: 3.6rem;
+      font-weight: 700;
+      line-height: 1.12;
+      color: #fff;
+      margin-bottom: 28px;
+      letter-spacing: -1px;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .stars svg {
+      flex-shrink: 0;
+    }
+
+    .rating-row a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .rating-row a:hover {
+      color: #2A9325;
+    }
+
+    .rating-row a strong {
+      color: #fff;
+    }
+
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-phone {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: #2A9325;
+      color: #fff;
+      border-radius: 100px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      text-decoration: none;
+      transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+    }
+
+    .btn-phone:hover {
+      background: #237a1f;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(42,147,37,0.35);
+    }
+
+    .btn-phone svg {
+      flex-shrink: 0;
+    }
+
+    .link-book {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s;
+    }
+
+    .link-book:hover {
+      color: #2A9325;
+    }
+
+    /* ── Form Card ── */
+    .hero-right {
+      flex-shrink: 0;
+      width: 380px;
+    }
+
+    .form-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 34px 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    .form-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .form-card .form-sub {
+      font-size: 0.82rem;
+      color: #999;
+      margin-bottom: 22px;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-family: 'Poppins', sans-serif;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+      background: #f8f8f8;
+      color: #1a1a1a;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #2A9325;
+      box-shadow: 0 0 0 4px rgba(42,147,37,0.10);
+      background: #fff;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: #2A9325;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.15s, box-shadow 0.25s;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover {
+      background: #237a1f;
+      box-shadow: 0 8px 28px rgba(42,147,37,0.30);
+    }
+
+    .submit-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ── Footer Bar ── */
+    .hero-footer {
+      padding: 18px 52px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      background: rgba(0,0,0,0.20);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .hero-footer a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .hero-footer a:hover {
+      color: #2A9325;
+    }
+
+    .hero-footer svg {
+      flex-shrink: 0;
+    }
+
+    /* ── Special Offers Grid ── */
+    .offers-section {
+      position: relative;
+      z-index: 1;
+      background: #ffffff;
+      padding: 70px 24px;
+    }
+
+    .offers-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .offers-heading {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .offers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .offer-box {
+      background: #fafff9;
+      border: 1px solid rgba(42,147,37,0.12);
+      border-radius: 18px;
+      padding: 32px 28px;
+      text-align: center;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .offer-box:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(42,147,37,0.10);
+    }
+
+    .offer-box-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #2A9325;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: rgba(42,147,37,0.08);
+      padding: 4px 14px;
+      border-radius: 100px;
+      margin-bottom: 12px;
+    }
+
+    .offer-box-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .offer-box-value {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #6B7280;
+    }
+
+    /* ── Insurance Section ── */
+    .insurance-section {
+      position: relative;
+      z-index: 1;
+      background: #f8fbf8;
+      padding: 80px 24px;
+    }
+
+    .insurance-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .insurance-heading {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .insurance-sub {
+      font-size: 1rem;
+      color: #6B7280;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .insurance-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .insurance-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 18px 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: all 0.25s ease;
+    }
+
+    .insurance-item::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2A9325;
+      flex-shrink: 0;
+    }
+
+    .insurance-item:hover {
+      border-color: #2A9325;
+      box-shadow: 0 8px 24px rgba(42,147,37,0.15);
+      transform: translateY(-3px);
+    }
+
+    /* ── Before & After ── */
+    .ba-section {
+      position: relative;
+      z-index: 1;
+      background: #f8fbf8;
+      padding: 70px 24px;
+    }
+
+    .ba-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .ba-heading {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .ba-sub {
+      font-size: 1rem;
+      color: #6B7280;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .ba-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .ba-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .ba-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.10);
+    }
+
+    .ba-card img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .ba-card-body {
+      padding: 16px 20px 20px;
+      text-align: center;
+    }
+
+    .ba-card-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #2A9325;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .ba-card-desc {
+      font-size: 0.9rem;
+      color: #6B7280;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .ba-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .ba-grid {
+        grid-template-columns: 1fr;
+      }
+      .logo-img {
+        width: 45px;
+      }
+      .practice-name {
+        font-size: 1rem;
+      }
+      .header-social-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+      }
+      .hero-left h1 {
+        font-size: 1.7rem;
+      }
+      .btn-phone {
+        font-size: 0.85rem;
+        padding: 12px 18px;
+      }
+      .services-list {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        max-width: none;
+        margin-bottom: 38px;
+      }
+      .services-list li {
+        font-size: 0.75rem;
+        padding-left: 26px;
+        min-height: 22px;
+      }
+      .services-list li .check-icon {
+        width: 22px;
+        height: 22px;
+      }
+      .services-list li .check-icon svg {
+        width: 10px;
+        height: 10px;
+      }
+    }
+    .location-section {
+      position: relative;
+      z-index: 1;
+      background: #ffffff;
+      padding: 70px 24px;
+    }
+
+    .location-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .location-map {
+      flex: 1;
+      min-width: 0;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    }
+
+    .location-map iframe {
+      display: block;
+      width: 100%;
+      height: 340px;
+      border: none;
+    }
+
+    .location-info {
+      flex-shrink: 0;
+      width: 360px;
+    }
+
+    .location-info h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+    }
+
+    .location-info .loc-sub {
+      font-size: 1.05rem;
+      color: #6B7280;
+      margin-bottom: 28px;
+    }
+
+    .loc-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 22px;
+      font-size: 1.05rem;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .loc-detail svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .loc-detail a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .loc-detail a:hover {
+      color: #2A9325;
+    }
+
+    .loc-detail strong {
+      color: #2A9325;
+    }
+
+    @media (max-width: 768px) {
+      .location-inner {
+        flex-direction: column;
+      }
+      .location-info {
+        width: 100%;
+      }
+      .location-map iframe {
+        height: 260px;
+      }
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      position: relative;
+      z-index: 1;
+      background: #2A9325;
+      padding: 50px 24px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .footer-text {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.5;
+    }
+
+    .footer-phone {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+      margin-top: 4px;
+    }
+
+    .footer-phone:hover {
+      text-decoration: underline;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .footer-social-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: transform 0.2s;
+      font-weight: 700;
+      font-size: 16px;
+      font-family: sans-serif;
+    }
+
+    .footer-social-icon:hover {
+      transform: scale(1.08);
+    }
+
+    .footer-heading {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .footer-link {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-wrap: wrap;
+      }
+      .logo-img {
+        width: 90px;
+      }
+      .practice-name {
+        font-size: 1.3rem;
+      }
+      .practice-name span {
+        font-size: 0.7rem;
+      }
+      .header-vr {
+        height: 36px;
+      }
+      .header-right {
+        gap: 12px;
+      }
+      .hero-left h1 {
+        font-size: 2.4rem;
+      }
+      .footer-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .insurance-section,
+      .location-section,
+      .reviews-section,
+      .site-footer {
+        padding: 44px 24px;
+      }
+      .offers-section,
+      .ba-section,
+      .services-card {
+        padding: 44px 24px;
+      }
+      .offers-heading,
+      .ba-heading,
+      .insurance-heading,
+      .location-info h2 {
+        font-size: 1.6rem;
+      }
+      .services-list {
+        gap: 12px 20px;
+      }
+      .services-card h2 {
+        font-size: 1.6rem;
+      }
+      .reviews-title {
+        font-size: 1.6rem;
+      }
+      .review-card {
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+      .review-card--right {
+        justify-content: flex-start;
+      }
+      .review-body {
+        max-width: 100%;
+      }
+      .action-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+    }
+
+    /* ── Reviews Section ── */
+    .reviews-section {
+      position: relative;
+      z-index: 1;
+      background: #050505;
+      padding: 70px 24px 80px;
+    }
+
+    .reviews-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .reviews-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .reviews-desc {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 48px;
+      line-height: 1.5;
+    }
+
+    .reviews-desc a {
+      color: #2A9325;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .reviews-desc a:hover {
+      color: #2dd127;
+    }
+
+    .review-card {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      margin-bottom: 40px;
+    }
+
+    .review-card--left {
+      justify-content: flex-start;
+    }
+
+    .review-card--right {
+      justify-content: flex-end;
+    }
+
+    .review-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      flex-shrink: 0;
+    }
+
+    .review-body {
+      background: #1a1a1a;
+      border-radius: 18px;
+      padding: 22px 26px;
+      max-width: 520px;
+    }
+
+    .review-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 10px;
+    }
+
+    .review-stars svg {
+      flex-shrink: 0;
+    }
+
+    .review-quote {
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .review-author {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #2A9325;
+    }
+
+    /* ── Services Section ── */
+    .services-section {
+      position: relative;
+      z-index: 1;
+      padding: 60px 24px;
+      display: flex;
+      justify-content: center;
+      background: #ffffff;
+    }
+
+    .services-card {
+      background: #e8f5e6;
+      border-radius: 32px;
+      padding: 56px 52px 46px;
+      max-width: 960px;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+    }
+
+    .services-card h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      text-align: center;
+      margin-bottom: 40px;
+      line-height: 1.3;
+    }
+
+    .services-grid {
+      margin-bottom: 38px;
+    }
+
+    .services-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      columns: 2;
+      column-gap: 72px;
+      max-width: 700px;
+      margin: 0 auto 38px;
+    }
+
+    .services-list li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #1a1a1a;
+      padding-left: 36px;
+      min-height: 30px;
+      margin-bottom: 18px;
+      break-inside: avoid;
+      position: relative;
+    }
+
+    .services-list li .check-icon {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .check-icon {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #2A9325;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .services-btn-wrap {
+      display: flex;
+      justify-content: center;
+    }
+
+    .services-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 16px 44px;
+      background: #2A9325;
+      color: #fff;
+      border-radius: 100px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      text-decoration: none;
+      transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+    }
+
+    .services-btn:hover {
+      background: #237a1f;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(42,147,37,0.30);
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #2A9325;
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 14px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.4s, transform 0.4s;
+      z-index: 999;
+      pointer-events: none;
+      box-shadow: 0 8px 32px rgba(42,147,37,0.35);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      header {
+        padding: 14px 24px;
+      }
+      .hero-body {
+        flex-direction: column;
+        padding: 40px 24px 30px;
+        gap: 36px;
+      }
+      .hero-left h1 {
+        font-size: 2.8rem;
+      }
+      .hero-right {
+        width: 100%;
+        max-width: 420px;
+      }
+      .hero-footer {
+        padding: 14px 24px;
+      }
+      .logo-img {
+        width: 140px;
+      }
+      .practice-name {
+        font-size: 1.6rem;
+      }
+      .practice-name span {
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      header {
+        padding: 12px 16px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-left {
+        width: 100%;
+      }
+      .header-right {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 14px;
+      }
+      .header-nav {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+      }
+      .logo-img {
+        width: 60px;
+      }
+      .practice-name {
+        font-size: 1.1rem;
+      }
+      .practice-name span {
+        font-size: 0.65rem;
+      }
+      .hero-left h1 {
+        font-size: 2rem;
+      }
+      .hero-body {
+        padding: 24px 16px 24px;
+        gap: 28px;
+      }
+      .form-card {
+        padding: 24px 20px;
+      }
+      .hero-footer {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        text-align: center;
+      }
+      .insurance-section,
+      .location-section,
+      .reviews-section,
+      .site-footer {
+        padding: 36px 16px;
+      }
+      .offers-section,
+      .ba-section,
+      .services-card {
+        padding: 36px 16px;
+      }
+      .offers-heading,
+      .ba-heading,
+      .insurance-heading,
+      .location-info h2,
+      .reviews-title {
+        font-size: 1.4rem;
+      }
+      .offers-sub,
+      .ba-sub,
+      .insurance-sub {
+        font-size: 0.9rem;
+        margin-bottom: 28px;
+      }
+      .offer-box {
+        padding: 24px 20px;
+      }
+      .insurance-item {
+        padding: 14px 22px;
+        font-size: 0.9rem;
+      }
+      .services-card h2 {
+        font-size: 1.4rem;
+      }
+      .services-card {
+        padding: 32px 20px;
+      }
+      .services-list {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        max-width: none;
+        margin-bottom: 38px;
+      }
+      .services-list li {
+        font-size: 0.85rem;
+        padding-left: 28px;
+        min-height: 24px;
+      }
+      .services-list li .check-icon {
+        width: 24px;
+        height: 24px;
+      }
+      .services-list li .check-icon svg {
+        width: 12px;
+        height: 12px;
+      }
+      .review-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+    }
+
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18156433722"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18156433722');
+  </script>
+</head>
+<body>
+
+  <!-- 3D Canvas -->
+  <div id="canvas-container"></div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">Thank you! We'll be in touch soon.</div>
+
+  <!-- ─── HEADER ─── -->
+  <header>
+      <div class="header-left">
+        <a class="logo-link" href="https://www.dentalloungefw.com" target="_blank" rel="noopener">
+          <img class="logo-img" src="dental-lounge.png" alt="The Dental Lounge" />
+        </a>
+        <div class="header-vr"></div>
+        <div class="practice-name">
+          The Dental Lounge
+          <span>1966 Ephriham Ave, Fort Worth, TX 76164</span>
+        </div>
+      </div>
+
+    <div class="header-right">
+      <nav class="header-nav">
+        <div class="header-social">
+          <a class="header-social-icon header-social-fb" href="https://www.facebook.com/TheDentalLoungeFortWorthTX/" target="_blank" rel="noopener" title="Facebook">f</a>
+          <a class="header-social-icon header-social-g" href="https://www.google.com/maps/place/The+Dental+Lounge/@32.7879876,-97.3801328,17z/data=!4m6!3m5!1s0x864e75814cd737c1:0xb77e2c49b4988889!8m2!3d32.7879876!4d-97.3801328!16s%2Fg%2F11wftjw5d_?entry=tts&g_ep=EgoyMDI1MTAwMS4wIPu8ASoASAFQAw%3D%3D&skid=1c47871f-9ef5-481e-ade7-59dcc45ff85b" target="_blank" rel="noopener" title="Google">G</a>
+        </div>
+      </nav>
+      <a class="header-item phone-link" href="tel:+18177040796">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A9325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        (817) 704-0796
+      </a>
+    </div>
+  </header>
+
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="hero-body">
+      <!-- Left Column -->
+      <div class="hero-left">
+        <h1>Emergency Dentist<br />in Fort Worth</h1>
+
+        <div class="rating-row">
+          <div class="stars">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#f5b342" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#f5b342" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#f5b342" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#f5b342" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#f5b342" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <a class="rating-link" href="https://www.google.com/maps/place/The+Dental+Lounge/@32.7879876,-97.3801328,17z/data=!4m6!3m5!1s0x864e75814cd737c1:0xb77e2c49b4988889!8m2!3d32.7879876!4d-97.3801328!16s%2Fg%2F11wftjw5d_?entry=tts&g_ep=EgoyMDI1MTAwMS4wIPu8ASoASAFQAw%3D%3D&skid=1c47871f-9ef5-481e-ade7-59dcc45ff85b" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#f5b342" stroke="none" style="vertical-align:-2px;margin-right:4px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>4.9/5 on Google Maps
+          </a>
+        </div>
+
+        <div class="action-row">
+          <a class="btn-phone" href="tel:+18177040796">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            (817) 704-0796
+          </a>
+          <a class="btn-phone" href="https://www.google.com/maps/place/The+Dental+Lounge/@32.7879876,-97.3801328,17z/data=!4m6!3m5!1s0x864e75814cd737c1:0xb77e2c49b4988889!8m2!3d32.7879876!4d-97.3801328!16s%2Fg%2F11wftjw5d_?entry=tts&g_ep=EgoyMDI1MTAwMS4wIPu8ASoASAFQAw%3D%3D&skid=1c47871f-9ef5-481e-ade7-59dcc45ff85b" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            1966 Ephriham Ave, Fort Worth, TX 76164
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column - Form -->
+      <div class="hero-right">
+        <div class="form-card">
+          <form id="contact-form" action="https://formsubmit.co/ajax/texaswebcoders@gmail.com" method="POST">
+            <input type="hidden" name="_subject" value="New Appointment Request - The Dental Lounge" />
+            <input type="hidden" name="_captcha" value="false" />
+            <div class="form-group">
+              <label for="fullName">Full Name</label>
+              <input type="text" id="fullName" name="fullName" placeholder="Full Name" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="Email" required />
+            </div>
+            <div class="form-group">
+              <label for="telephone">Telephone No</label>
+              <input type="tel" id="telephone" name="telephone" placeholder="Telephone No" required />
+            </div>
+            <div class="form-group">
+              <label for="reason">Reason for Visit</label>
+              <select id="reason" name="reason" required>
+                <option value="" disabled selected>Select an option</option>
+                <option value="emergency">Emergency Dental Care</option>
+                <option value="checkup">Routine Check-up</option>
+                <option value="invisalign">Invisalign / Implants</option>
+              </select>
+            </div>
+            <button class="submit-btn" type="submit">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Bar -->
+    <div class="hero-footer">
+      <a href="https://www.google.com/maps/place/The+Dental+Lounge/@32.7879876,-97.3801328,17z/data=!4m6!3m5!1s0x864e75814cd737c1:0xb77e2c49b4988889!8m2!3d32.7879876!4d-97.3801328!16s%2Fg%2F11wftjw5d_?entry=tts&g_ep=EgoyMDI1MTAwMS4wIPu8ASoASAFQAw%3D%3D&skid=1c47871f-9ef5-481e-ade7-59dcc45ff85b" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A9325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        1966 Ephriham Ave, Fort Worth, TX 76164
+      </a>
+    </div>
+  </section>
+
+  <!-- ─── OFFERS SECTION ─── -->
+  <section class="offers-section" id="offers">
+    <div class="offers-container">
+      <h2 class="offers-heading">Special Offers</h2>
+      <div class="offers-grid">
+        <div class="offer-box">
+          <div class="offer-box-tag">NEW PATIENTS ONLY</div>
+          <div class="offer-box-title">Complimentary Exam & X-rays</div>
+          <div class="offer-box-value">($99 value)</div>
+        </div>
+        <div class="offer-box">
+          <div class="offer-box-tag">SAME DAY AVAILABLE</div>
+          <div class="offer-box-title">Complimentary Emergency Exam</div>
+          <div class="offer-box-value">($79 Value)</div>
+        </div>
+        <div class="offer-box">
+          <div class="offer-box-tag">COSMETIC CARE</div>
+          <div class="offer-box-title">$150 OFF In-House Teeth Whitening</div>
+          <div class="offer-box-value">($375.00 value)</div>
+        </div>
+        <div class="offer-box">
+          <div class="offer-box-tag">SMILE ALIGNMENT</div>
+          <div class="offer-box-title">$500 OFF Ortho (Braces or Aligners)</div>
+          <div class="offer-box-value">($4500-$5000 value)</div>
+        </div>
+        <div class="offer-box">
+          <div class="offer-box-tag">RESTORATIVE SPECIALIST</div>
+          <div class="offer-box-title">Complimentary Implant Consultations</div>
+          <div class="offer-box-value">($99 value)</div>
+        </div>
+        <div class="offer-box">
+          <div class="offer-box-tag">FINANCIAL FLEXIBILITY</div>
+          <div class="offer-box-title">Affordable Payment Plan Options</div>
+          <div class="offer-box-value">We are here to help</div>
+        </div>
+        <div class="offer-box">
+          <div class="offer-box-tag">SAME-DAY SCHEDULING</div>
+          <div class="offer-box-title">10% OFF Any full treatment</div>
+          <div class="offer-box-value">Valid when treatment is accepted & paid same-day</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SERVICES SECTION ─── -->
+  <section class="services-section">
+    <div class="services-card">
+      <h2>Same-day treatment for dental emergencies.</h2>
+      <div class="services-grid">
+        <ul class="services-list">
+          <li>
+            <span class="check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            Toothache/Dental Pain Relief
+          </li>
+          <li>
+            <span class="check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            Tooth Extractions
+          </li>
+          <li>
+            <span class="check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            Jaw Pain
+          </li>
+          <li>
+            <span class="check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            Chipped Tooth Repair
+          </li>
+          <li>
+            <span class="check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            General Dentistry
+          </li>
+          <li>
+            <span class="check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            Dental Emergencies
+          </li>
+          <li>
+            <span class="check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            Root Canals
+          </li>
+          <li>
+            <span class="check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            Wisdom Tooth Pain
+          </li>
+          <li>
+            <span class="check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            Cavity Fillings
+          </li>
+          <li>
+            <span class="check-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            And More
+          </li>
+        </ul>
+      </div>
+      <div class="services-btn-wrap">
+        <a class="services-btn" href="https://www.dentalloungefw.com/services/" target="_blank" rel="noopener">View services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── INSURANCE SECTION ─── -->
+  <section class="insurance-section">
+    <div class="insurance-container">
+      <h2 class="insurance-heading">We Accept Insurance</h2>
+      <p class="insurance-sub">Accepted by most major insurance providers</p>
+      <div class="insurance-grid">
+        <span class="insurance-item">Aetna</span>
+        <span class="insurance-item">Blue Cross Blue Shield</span>
+        <span class="insurance-item">MetLife</span>
+        <span class="insurance-item">Humana</span>
+        <span class="insurance-item">Carrington</span>
+        <span class="insurance-item">United HealthCare</span>
+        <span class="insurance-item">Delta Dental</span>
+        <span class="insurance-item">Cigna</span>
+        <span class="insurance-item">Ameritas</span>
+        <span class="insurance-item">Guardian</span>
+        <span class="insurance-item">And many more...</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── BEFORE & AFTER ─── -->
+  <section class="ba-section">
+    <div class="ba-container">
+      <h2 class="ba-heading">Before & After</h2>
+      <p class="ba-sub">Real results from our patients</p>
+      <div class="ba-grid">
+        <div class="ba-card">
+          <img src="before-after-set1.jpg" alt="Before and after result 1" loading="lazy" />
+          <div class="ba-card-body">
+            <div class="ba-card-label">Smile Makeover</div>
+          </div>
+        </div>
+        <div class="ba-card">
+          <img src="before-after-set2.jpg" alt="Before and after result 2" loading="lazy" />
+          <div class="ba-card-body">
+            <div class="ba-card-label">Dental Implants</div>
+          </div>
+        </div>
+        <div class="ba-card">
+          <img src="before-after-set3.jpg" alt="Before and after result 3" loading="lazy" />
+          <div class="ba-card-body">
+            <div class="ba-card-label">Teeth Whitening</div>
+          </div>
+        </div>
+        <div class="ba-card">
+          <img src="before-after-set4.jpg" alt="Before and after result 4" loading="lazy" />
+          <div class="ba-card-body">
+            <div class="ba-card-label">Full Mouth Restoration</div>
+          </div>
+        </div>
+        <div class="ba-card">
+          <img src="before-after-set5.jpg" alt="Before and after result 5" loading="lazy" />
+          <div class="ba-card-body">
+            <div class="ba-card-label">Cosmetic Dentistry</div>
+          </div>
+        </div>
+        <div class="ba-card">
+          <img src="before-after-set6.jpg" alt="Before and after result 6" loading="lazy" />
+          <div class="ba-card-body">
+            <div class="ba-card-label">Veneers</div>
+          </div>
+        </div>
+        <div class="ba-card">
+          <img src="before-after-set7.jpg" alt="Before and after result 7" loading="lazy" />
+          <div class="ba-card-body">
+            <div class="ba-card-label">Orthodontics</div>
+          </div>
+        </div>
+        <div class="ba-card">
+          <img src="before-after8new.jpg" alt="Before and after result 8" loading="lazy" />
+          <div class="ba-card-body">
+            <div class="ba-card-label">Root Canal</div>
+          </div>
+        </div>
+        <div class="ba-card">
+          <img src="before-after-set9.jpg" alt="Before and after result 9" loading="lazy" />
+          <div class="ba-card-body">
+            <div class="ba-card-label">Crowns & Bridges</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── REVIEWS SECTION ─── -->
+  <section class="reviews-section">
+    <div class="reviews-inner">
+      <h2 class="reviews-title">Patient Reviews</h2>
+      <p class="reviews-desc">
+        We're more than just a top-rated late-night dentist. Read some
+        <a href="https://www.google.com/maps/place/The+Dental+Lounge/@32.7879876,-97.3801328,17z/data=!4m6!3m5!1s0x864e75814cd737c1:0xb77e2c49b4988889!8m2!3d32.7879876!4d-97.3801328!16s%2Fg%2F11wftjw5d_?entry=tts&g_ep=EgoyMDI1MTAwMS4wIPu8ASoASAFQAw%3D%3D&skid=1c47871f-9ef5-481e-ade7-59dcc45ff85b" target="_blank" rel="noopener">Google reviews</a>
+        to see how we go above and beyond.
+      </p>
+
+      <!-- Card 1 - Left -->
+      <div class="review-card review-card--left">
+        <div class="review-avatar" style="background:#2A9325;color:#1a1a1a;">GR</div>
+        <div class="review-body">
+          <div class="review-stars">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <p class="review-quote">"Amazing place and best service. I have been here multiple times and Dr. Osman does NOT fail to impress and take care of you. HIGHLY RECOMMENDED!"</p>
+          <span class="review-author">Google review</span>
+        </div>
+      </div>
+
+      <!-- Card 2 - Right -->
+      <div class="review-card review-card--right">
+        <div class="review-avatar" style="background:#2a2a2a;color:#fff;">GR</div>
+        <div class="review-body">
+          <div class="review-stars">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <p class="review-quote">"Really nice new dentist office in the area. Nice and clean with a super friendly staff. Dr. Osman was super personable and is good at what he does."</p>
+          <span class="review-author">Google review</span>
+        </div>
+      </div>
+
+      <!-- Card 3 - Left -->
+      <div class="review-card review-card--left">
+        <div class="review-avatar" style="background:#2A9325;color:#1a1a1a;">GR</div>
+        <div class="review-body">
+          <div class="review-stars">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <p class="review-quote">"The Dental Lounge is honestly such a great place! From the moment I walked in, everyone was incredibly kind and welcoming."</p>
+          <span class="review-author">Google review</span>
+        </div>
+      </div>
+
+      <!-- Card 4 - Right -->
+      <div class="review-card review-card--right">
+        <div class="review-avatar" style="background:#2a2a2a;color:#fff;">GR</div>
+        <div class="review-body">
+          <div class="review-stars">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#2A9325" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <p class="review-quote">"Dr. Osman took the time to walk me through my treatment plan and explained everything clearly and patiently."</p>
+          <span class="review-author">Google review</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── LOCATION SECTION ─── -->
+  <section class="location-section">
+    <div class="location-inner">
+      <div class="location-map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3354.1609243155613!2d-97.38270772524552!3d32.78799208342668!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x864e75814cd737c1%3A0xb77e2c49b4988889!2sThe%20Dental%20Lounge!5e0!3m2!1sen!2s!4v1781726637731!5m2!1sen!2s"
+          width="100%"
+          height="340"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="The Dental Lounge location">
+        </iframe>
+      </div>
+      <div class="location-info">
+        <h2>Visit Us</h2>
+        <p class="loc-sub">We're here to help</p>
+        <div class="loc-detail">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2A9325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div>
+            <strong>The Dental Lounge</strong><br />
+      <a href="https://www.google.com/maps/place/The+Dental+Lounge/@32.7879876,-97.3801328,17z/data=!4m6!3m5!1s0x864e75814cd737c1:0xb77e2c49b4988889!8m2!3d32.7879876!4d-97.3801328!16s%2Fg%2F11wftjw5d_?entry=tts&g_ep=EgoyMDI1MTAwMS4wIPu8ASoASAFQAw%3D%3D&skid=1c47871f-9ef5-481e-ade7-59dcc45ff85b" target="_blank" rel="noopener">
+              1966 Ephriham Ave<br />
+              Fort Worth, TX 76164
+            </a>
+          </div>
+        </div>
+        <div class="loc-detail">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2A9325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <a href="tel:+18177040796">(817) 704-0796</a>
+        </div>
+        <div class="loc-detail">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2A9325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <a href="https://www.google.com/maps/place/The+Dental+Lounge/@32.7879876,-97.3801328,17z/data=!4m6!3m5!1s0x864e75814cd737c1:0xb77e2c49b4988889!8m2!3d32.7879876!4d-97.3801328!16s%2Fg%2F11wftjw5d_?entry=tts&g_ep=EgoyMDI1MTAwMS4wIPu8ASoASAFQAw%3D%3D&skid=1c47871f-9ef5-481e-ade7-59dcc45ff85b" target="_blank" rel="noopener"><strong>4.9</strong> — 220+ Google Reviews</a>
+        </div>
+        <div class="loc-detail">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2A9325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div>
+            <strong>Office Hours:</strong><br />
+            Mon–Thu: 9am – 6pm<br />
+            Friday: Closed
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <!-- Column 1: Brand -->
+      <div class="footer-col">
+        <div class="footer-name">The Dental Lounge Fort Worth</div>
+        <div class="footer-text">
+          1966 Ephriham Ave<br />
+          Fort Worth, TX 76164
+        </div>
+        <a class="footer-phone" href="tel:+18177040796">(817) 704-0796</a>
+        <div class="footer-social">
+          <a class="footer-social-icon header-social-fb" href="https://www.facebook.com/TheDentalLoungeFortWorthTX/" target="_blank" rel="noopener" title="Facebook">f</a>
+          <a class="footer-social-icon header-social-g" href="https://www.google.com/maps/place/The+Dental+Lounge/@32.7879876,-97.3801328,17z/data=!4m6!3m5!1s0x864e75814cd737c1:0xb77e2c49b4988889!8m2!3d32.7879876!4d-97.3801328!16s%2Fg%2F11wftjw5d_?entry=tts&g_ep=EgoyMDI1MTAwMS4wIPu8ASoASAFQAw%3D%3D&skid=1c47871f-9ef5-481e-ade7-59dcc45ff85b" target="_blank" rel="noopener" title="Google">G</a>
+        </div>
+      </div>
+
+      <!-- Column 2: Office Hours -->
+      <div class="footer-col">
+        <div class="footer-heading">Office Hours:</div>
+        <div class="footer-text">Monday: 9am - 6pm</div>
+        <div class="footer-text">Tuesday: 9am - 6pm</div>
+        <div class="footer-text">Wednesday: 9am - 6pm</div>
+        <div class="footer-text">Thursday: 9am - 6pm</div>
+        <div class="footer-text">Friday: Closed</div>
+      </div>
+
+      <!-- Column 3: Links -->
+      <div class="footer-col">
+        <div class="footer-heading">Links:</div>
+        <a class="footer-link" href="https://www.dentalloungefw.com/" target="_blank" rel="noopener">Home</a>
+        <a class="footer-link" href="https://www.dentalloungefw.com/about/" target="_blank" rel="noopener">About</a>
+        <a class="footer-link" href="https://www.dentalloungefw.com/blog/" target="_blank" rel="noopener">Blog</a>
+        <a class="footer-link" href="https://www.dentalloungefw.com/reviews/" target="_blank" rel="noopener">Reviews</a>
+        <a class="footer-link" href="https://www.dentalloungefw.com/contact/" target="_blank" rel="noopener">Contact</a>
+        <a class="footer-link" href="https://www.dentalloungefw.com/appointment/" target="_blank" rel="noopener">Appointment</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── THREE.JS 3D ─── -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    (function() {
+      const container = document.getElementById('canvas-container');
+      const scene = new THREE.Scene();
+      scene.background = null;
+
+      const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+      camera.position.set(0, 0, 14);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+      scene.add(ambient);
+
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      dirLight.position.set(5, 10, 7);
+      scene.add(dirLight);
+
+      const dirLight2 = new THREE.DirectionalLight(0x2A9325, 0.5);
+      dirLight2.position.set(-5, -3, 5);
+      scene.add(dirLight2);
+
+      const group = new THREE.Group();
+      scene.add(group);
+
+      // Tooth shapes
+      const toothGeo = new THREE.IcosahedronGeometry(0.8, 1);
+
+      const mainMat = new THREE.MeshPhysicalMaterial({
+        color: 0x2A9325,
+        metalness: 0.1,
+        roughness: 0.25,
+        clearcoat: 0.4,
+        clearcoatRoughness: 0.3,
+        transparent: true,
+        opacity: 0.5,
+      });
+      const mainTooth = new THREE.Mesh(toothGeo, mainMat);
+      mainTooth.scale.set(1.4, 1.8, 1.1);
+      mainTooth.position.set(-0.8, 0.6, 0);
+      group.add(mainTooth);
+
+      const secMat = new THREE.MeshPhysicalMaterial({
+        color: 0x2A9325,
+        metalness: 0.15,
+        roughness: 0.2,
+        transparent: true,
+        opacity: 0.25,
+      });
+      const secTooth = new THREE.Mesh(toothGeo, secMat);
+      secTooth.scale.set(1.0, 1.3, 0.8);
+      secTooth.position.set(1.6, -0.8, -1.2);
+      group.add(secTooth);
+
+      const smallMat = new THREE.MeshPhysicalMaterial({
+        color: 0x2A9325,
+        metalness: 0.05,
+        roughness: 0.3,
+        transparent: true,
+        opacity: 0.2,
+      });
+      const smallTooth = new THREE.Mesh(toothGeo, smallMat);
+      smallTooth.scale.set(0.6, 0.8, 0.5);
+      smallTooth.position.set(-1.2, -1.4, 1.5);
+      group.add(smallTooth);
+
+      const ringMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        metalness: 0.3,
+        roughness: 0.2,
+        transparent: true,
+        opacity: 0.1,
+      });
+
+      const ring1 = new THREE.Mesh(new THREE.TorusGeometry(2.2, 0.04, 16, 64), ringMat);
+      ring1.rotation.x = Math.PI / 3;
+      ring1.rotation.y = Math.PI / 5;
+      ring1.position.set(0, 0.2, 0);
+      group.add(ring1);
+
+      const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.8, 0.035, 16, 64), ringMat);
+      ring2.rotation.x = -Math.PI / 4;
+      ring2.rotation.y = Math.PI / 3;
+      ring2.position.set(0.3, -0.3, 0);
+      ring2.material = ringMat.clone();
+      ring2.material.opacity = 0.06;
+      group.add(ring2);
+
+      // Particles
+      const particleCount = 400;
+      const positions = new Float32Array(particleCount * 3);
+      for (let i = 0; i < particleCount; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const r = 3 + Math.random() * 5;
+        positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+        positions[i * 3 + 1] = r * Math.cos(phi);
+        positions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+      }
+
+      const particleGeo = new THREE.BufferGeometry();
+      particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+      const particleMat = new THREE.PointsMaterial({
+        color: 0x2A9325,
+        size: 0.05,
+        transparent: true,
+        opacity: 0.2,
+        blending: THREE.AdditiveBlending,
+        sizeAttenuation: true,
+      });
+      const particles = new THREE.Points(particleGeo, particleMat);
+      scene.add(particles);
+
+      let mouseX = 0, mouseY = 0;
+      document.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth) * 2 - 1;
+        const y = -(e.clientY / window.innerHeight) * 2 + 1;
+        mouseX = x * 0.3;
+        mouseY = y * 0.2;
+      });
+
+      function resize() {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+      }
+      window.addEventListener('resize', resize);
+
+      let time = 0;
+      function animate() {
+        requestAnimationFrame(animate);
+        time += 0.005;
+
+        group.rotation.x = Math.sin(time * 0.15) * 0.08 + mouseY * 0.3;
+        group.rotation.y = time * 0.12 + mouseX * 0.5;
+
+        mainTooth.rotation.x = Math.sin(time * 0.5) * 0.1;
+        mainTooth.rotation.z = Math.sin(time * 0.3) * 0.08;
+        mainTooth.position.y = 0.6 + Math.sin(time * 0.6) * 0.15;
+
+        secTooth.rotation.x = Math.sin(time * 0.4 + 1) * 0.12;
+        secTooth.rotation.z = Math.cos(time * 0.35) * 0.1;
+
+        smallTooth.rotation.y = time * 0.5;
+        smallTooth.rotation.x = Math.sin(time * 0.6) * 0.2;
+
+        ring1.rotation.z = time * 0.08;
+        ring2.rotation.z = -time * 0.06;
+
+        particles.rotation.y = time * 0.02;
+        particles.rotation.x = Math.sin(time * 0.01) * 0.05;
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    })();
+  </script>
+
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = this;
+      const toast = document.getElementById('toast');
+      const data = new FormData(form);
+      const plain = {};
+      data.forEach(function(v, k) { plain[k] = v; });
+
+      fetch(form.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(plain),
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.success) {
+          gtag('event', 'conversion', {
+            'send_to': 'AW-18156433722/AzEYCKrmm68cELri1NFD',
+            'value': 1.0,
+            'currency': 'USD'
+          });
+          toast.textContent = 'Thank you! We\'ll be in touch soon.';
+          toast.classList.add('show');
+          form.reset();
+        } else {
+          toast.textContent = 'Something went wrong. Please try again.';
+          toast.classList.add('show');
+        }
+        setTimeout(function() { toast.classList.remove('show'); }, 4000);
+      })
+      .catch(function() {
+        toast.textContent = 'Something went wrong. Please try again.';
+        toast.classList.add('show');
+        setTimeout(function() { toast.classList.remove('show'); }, 4000);
+      });
+    });
+  </script>
+
+  <!--Start of Tawk.to Script-->
+  <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/6a02618609b21b1c35fa2a37/1jom8oqs9';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
+  </script>
+  <!--End of Tawk.to Script-->
+
+</body>
+</html>
