@@ -1369,12 +1369,30 @@
             </div>
             <div class="form-group">
               <label for="reason">Reason for Visit</label>
-              <select id="reason" name="reason" required>
-                <option value="" disabled selected>Select an option</option>
-                <option value="emergency">Emergency Dental Care</option>
-                <option value="checkup">Routine Check-up</option>
-                <option value="invisalign">Invisalign / Implants</option>
+              <select id="reason" name="reason" required onchange="toggleOtherReason(this)">
+                <option value="" disabled selected>Select a reason for visit</option>
+                <option value="New Patient Exam">New Patient Exam</option>
+                <option value="Routine Checkup & Cleaning">Routine Checkup &amp; Cleaning</option>
+                <option value="Emergency Dental Care">Emergency Dental Care</option>
+                <option value="Tooth Pain / Toothache">Tooth Pain / Toothache</option>
+                <option value="Broken or Chipped Tooth">Broken or Chipped Tooth</option>
+                <option value="Filling Needed">Filling Needed</option>
+                <option value="Crown Consultation">Crown Consultation</option>
+                <option value="Root Canal Consultation">Root Canal Consultation</option>
+                <option value="Dental Implant Consultation">Dental Implant Consultation</option>
+                <option value="Dentures Consultation">Dentures Consultation</option>
+                <option value="Teeth Whitening">Teeth Whitening</option>
+                <option value="Cosmetic Dentistry Consultation">Cosmetic Dentistry Consultation</option>
+                <option value="Clear Aligners / Invisalign Consultation">Clear Aligners / Invisalign Consultation</option>
+                <option value="Gum Treatment">Gum Treatment</option>
+                <option value="Wisdom Tooth Evaluation">Wisdom Tooth Evaluation</option>
+                <option value="Extraction / Tooth Removal">Extraction / Tooth Removal</option>
+                <option value="Second Opinion">Second Opinion</option>
+                <option value="Pediatric / Child Dental Visit">Pediatric / Child Dental Visit</option>
+                <option value="Follow-Up Appointment">Follow-Up Appointment</option>
+                <option value="Other (Please Specify)">Other (Please Specify)</option>
               </select>
+              <input type="text" id="otherReason" name="otherReason" placeholder="Please specify your reason" style="display:none;margin-top:8px" />
             </div>
             <button class="submit-btn" type="submit">Submit</button>
           </form>
@@ -1926,10 +1944,25 @@
   </script>
 
   <script>
+    function toggleOtherReason(select) {
+      var otherInput = document.getElementById('otherReason');
+      if (select.value === 'Other (Please Specify)') {
+        otherInput.style.display = 'block';
+        otherInput.required = true;
+      } else {
+        otherInput.style.display = 'none';
+        otherInput.required = false;
+      }
+    }
     document.getElementById('contact-form').addEventListener('submit', function(e) {
       e.preventDefault();
       const form = this;
       const toast = document.getElementById('toast');
+      const select = document.getElementById('reason');
+      const otherInput = document.getElementById('otherReason');
+      if (select.value === 'Other (Please Specify)') {
+        select.value = otherInput.value || 'Other';
+      }
       const data = new FormData(form);
       const plain = {};
       data.forEach(function(v, k) { plain[k] = v; });
